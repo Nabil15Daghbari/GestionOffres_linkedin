@@ -25,7 +25,7 @@ export class DemandeRhComponent implements OnInit {
    interviewLocation: string = '';
    interviewDate!:Date;
 
-   showEvaluation = true;
+   showEvaluation = false;
    showButton=false;
   constructor(
     private router:Router,

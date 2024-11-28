@@ -26,6 +26,7 @@ export class StatistiqueComponent implements OnInit {
       ).subscribe({
           next: (data) => {
               this.dashboardStats = data;
+              console.log(data)
               this.error = null;
           },
           error: (error) => {

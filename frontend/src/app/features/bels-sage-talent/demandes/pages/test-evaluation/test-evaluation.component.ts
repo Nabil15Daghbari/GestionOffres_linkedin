@@ -48,19 +48,31 @@ export class TestEvaluationComponent  implements OnInit {
   }
 
   checkExistingEvaluation() {
-    this.evaluationService.getEvaluationByRequestId(this.requestId)
-      .subscribe(
-        (evaluation) => {
-          if (evaluation) {
-            // Désactiver le formulaire si une évaluation existe déjà
-            this.evaluationForm.disable();
-            this.loadExistingAnswers(evaluation);
+    if (this.requestId) {
+      this.evaluationService.getEvaluationByRequestId(this.requestId)
+        .subscribe(
+          (evaluation) => {
+            if (evaluation) {
+              this.evaluationForm.disable();
+              this.loadExistingAnswers(evaluation);
+            } else {
+              console.warn('Évaluation introuvable.');
+            }
+          },
+          (error) => {
+            if (error.status === 404) {
+              console.warn(`Évaluation introuvable pour requestId ${this.requestId}.`);
+              // Optionnel : message utilisateur
+            } else {
+              console.error(`Erreur réseau : ${error.message}`, error);
+            }
           }
-        },
-        (error) => console.error('Error checking existing evaluation:', error)
-      );
+        );
+    } else {
+      console.log('Request ID introuvable.');
+    }
   }
-
+  
   loadExistingAnswers(evaluation: any) {
     const answersArray = this.evaluationForm.get('answers') as FormArray;
     evaluation.answers.forEach((answer: any) => {
